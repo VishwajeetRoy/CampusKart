@@ -25,6 +25,10 @@ const SearchBar = () => {
     }
   }
 
+  const handlePostItem = () => {
+    navigate('/add')
+  }
+
   return (
     <Box
       sx={{
@@ -80,6 +84,7 @@ const SearchBar = () => {
       <Button
         variant="outlined"
         startIcon={<AddIcon />}
+        onClick={handlePostItem}
         sx={{
           textTransform: 'none',
           borderRadius: '12px',

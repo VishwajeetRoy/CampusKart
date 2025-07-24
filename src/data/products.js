@@ -9,6 +9,7 @@ const products = [
     category: "Electronics",
     price: '30,000',
     description: "Used Laptop, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user1",
   },
   {
     id: 2,
@@ -21,6 +22,8 @@ const products = [
     category: "Books",
     price: '150',
     description: "Engineering Maths 2 Textbook. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user2",
+
   },
   {
     id: 3,
@@ -33,6 +36,8 @@ const products = [
     category: "Electronics",
     price: '500',
     description: "Scientific Calculator. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user3",
+
   },
   {
     id: 4,
@@ -45,6 +50,7 @@ const products = [
     category: "Clothes",
     price: '200',
     description: "WMP Lab Coat. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user4",
   },
   {
     id: 5,
@@ -57,6 +63,7 @@ const products = [
     category: "Stationary",
     price: '200',
     description: "Single Sided Sheet Bundle. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user5",
   },
   {
     id: 6,
@@ -64,11 +71,12 @@ const products = [
     images: [
       "https://rukminim2.flixcart.com/image/704/844/xif0q/paper/a/p/1/a4-size-both-side-ruled-white-sheet-for-project-2-pack-of-40-original-imagpsruha7zcpha.jpeg?q=90&crop=false", 
       "https://rukminim2.flixcart.com/image/704/844/xif0q/paper/a/p/1/a4-size-both-side-ruled-white-sheet-for-project-2-pack-of-40-original-imagpsruha7zcpha.jpeg?q=90&crop=false", 
-      "https://rukminim2.flixcart.com/image/704/844/xif0q/paper/a/p/1/a4-size-both-side-ruled-white-sheet-for-project-2-pack-of-40-original-imagpsruha7zcpha.jpeg?q=90&crop=false", 
+      "https://rukminim2.flixcart.com/image/704/844/xif0q/paper/a/p/1/a4-size-both-side-ruled-white-sheet-for-project-2-pack-of-40-original-imagpsruha7zcpha.jpeg?q=90&crop=false",
       ] , 
     category: "Stationary",
     price: '200',
     description: "Double Sided Sheet Bundle. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user6",
   },
   {
     id: 7,
@@ -81,6 +89,7 @@ const products = [
     category: "Clothes",
     price: '200',
     description: "Chemistry Lab Coat. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user7",
   },
   {
     id: 8,
@@ -93,6 +102,7 @@ const products = [
     category: "Books",
     price: '150',
     description: "Physics Reference Book. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user8",
   },
   {
     id: 9,
@@ -105,6 +115,7 @@ const products = [
     category: "Books",
     price: '50',
     description: "Engineering Mechanics Reference Book. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
+    sellerId: "user9",
   },
 ];
 

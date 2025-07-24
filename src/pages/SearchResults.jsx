@@ -1,11 +1,10 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
-import products from '../data/products'
 import categories from '../data/categories'
 import ProductCard from '../components/ProductCard'
 
-const SearchResults = () => {
+const SearchResults = ({ products }) => {
   const { query } = useParams()
   const rawSearch = query.toLowerCase()
 
