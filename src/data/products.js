@@ -10,6 +10,7 @@ const products = [
     price: '30,000',
     description: "Used Laptop, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user1",
+    status: "active",
   },
   {
     id: 2,
@@ -23,7 +24,7 @@ const products = [
     price: '150',
     description: "Engineering Maths 2 Textbook. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user2",
-
+    status: "active",
   },
   {
     id: 3,
@@ -37,7 +38,7 @@ const products = [
     price: '500',
     description: "Scientific Calculator. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user3",
-
+    status: "active",
   },
   {
     id: 4,
@@ -51,6 +52,7 @@ const products = [
     price: '200',
     description: "WMP Lab Coat. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user4",
+    status: "active",
   },
   {
     id: 5,
@@ -64,6 +66,7 @@ const products = [
     price: '200',
     description: "Single Sided Sheet Bundle. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user5",
+    status: "active",
   },
   {
     id: 6,
@@ -77,6 +80,7 @@ const products = [
     price: '200',
     description: "Double Sided Sheet Bundle. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user6",
+    status: "active",
   },
   {
     id: 7,
@@ -90,6 +94,7 @@ const products = [
     price: '200',
     description: "Chemistry Lab Coat. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user7",
+    status: "active",
   },
   {
     id: 8,
@@ -103,6 +108,7 @@ const products = [
     price: '150',
     description: "Physics Reference Book. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user8",
+    status: "active",
   },
   {
     id: 9,
@@ -116,6 +122,7 @@ const products = [
     price: '50',
     description: "Engineering Mechanics Reference Book. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae aperiam odio impedit nesciunt iusto nam ducimus explicabo commodi maxime amet. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem consequatur rem, earum dicta modi fugit possimus quis ea ab maxime, totam eaque eum, tenetur a neque fugiat harum qui vitae!", 
     sellerId: "user9",
+    status: "active",
   },
 ];
 
