@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -16,67 +16,75 @@ import {
   Tab,
   IconButton,
   InputAdornment,
-} from '@mui/material'
-import { Visibility, VisibilityOff, AccountCircle } from '@mui/icons-material'
-import { Link, useNavigate } from 'react-router-dom'
-import categories from '../data/categories'
+} from "@mui/material";
+import { Visibility, VisibilityOff, AccountCircle, Brightness4, Brightness7 } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+import categories from "../data/categories";
 
-const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [currentCategory, setCurrentCategory] = useState(null)
-  const [loginOpen, setLoginOpen] = useState(false)
-  const [tabIndex, setTabIndex] = useState(0) 
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [loggedInUser, setLoggedInUser] = useState(null) 
-  const navigate = useNavigate()
+const Navbar = ({ loggedInUser, setLoggedInUser, darkMode, setDarkMode }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleCategoryHover = (event, category) => {
-    setAnchorEl(event.currentTarget)
-    setCurrentCategory(category)
-  }
+    setAnchorEl(event.currentTarget);
+    setCurrentCategory(category);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-    setCurrentCategory(null)
-  }
+    setAnchorEl(null);
+    setCurrentCategory(null);
+  };
 
   const handleCategoryClick = (category) => {
-    navigate(`/search/${encodeURIComponent(category)}`)
-    handleClose()
-  }
+    navigate(`/search/${encodeURIComponent(category)}`);
+    handleClose();
+  };
 
-  const handleLoginOpen = () => setLoginOpen(true)
-  const handleLoginClose = () => setLoginOpen(false)
-  const handleTabChange = (event, newValue) => setTabIndex(newValue)
+  const handleLoginOpen = () => setLoginOpen(true);
+  const handleLoginClose = () => setLoginOpen(false);
+  const handleTabChange = (event, newValue) => setTabIndex(newValue);
 
   const handleSubmit = () => {
-    setLoggedInUser('John Doe')
-    setLoginOpen(false)
-    navigate('/') 
-  }
+    if (email === "admin@campuskart.com" && password === "admin123") {
+      setLoggedInUser({ name: "Admin", role: "admin" });
+      setLoginOpen(false);
+      navigate("/admin");
+    } else {
+      setLoggedInUser({ name: "John Doe", role: "user" });
+      setLoginOpen(false);
+      navigate("/");
+    }
+  };
 
   const handleLogout = () => {
-    setLoggedInUser(null)
-    navigate('/')
-  }
+    setLoggedInUser(null);
+    navigate("/");
+  };
 
   const handleProfileClick = () => {
-    navigate('/profile') 
-  }
+    navigate("/profile");
+  };
 
   return (
     <>
       <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          {/* Left: Logo */}
           <Box
             component={Link}
             to="/"
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              color: 'inherit',
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+              color: "inherit",
               gap: 1,
             }}
           >
@@ -84,18 +92,14 @@ const Navbar = () => {
               component="img"
               src="/logo.png"
               alt="CampusKart Logo"
-              sx={{
-                width: 60,
-                height: 60,
-                objectFit: 'contain',
-              }}
+              sx={{ width: 60, height: 60, objectFit: "contain" }}
             />
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               CampusKart
             </Typography>
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", gap: 2 }}>
             {Object.keys(categories).map((cat) => (
               <Button
                 key={cat}
@@ -114,44 +118,52 @@ const Navbar = () => {
             >
               {currentCategory &&
                 categories[currentCategory].map((item, index) => (
-                  <MenuItem
-                    key={index}
-                    onClick={() => handleCategoryClick(item)}
-                  >
+                  <MenuItem key={index} onClick={() => handleCategoryClick(item)}>
                     {item}
                   </MenuItem>
                 ))}
             </Menu>
           </Box>
 
-          {loggedInUser ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Typography variant="body1">Hi, {loggedInUser}</Typography>
-              <IconButton color="primary" onClick={handleProfileClick}>
-                <AccountCircle />
-              </IconButton>
-              <Button variant="outlined" onClick={handleLogout}>
-                Log Out
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <IconButton onClick={() => setDarkMode(!darkMode)}>
+              {darkMode ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
+
+            {loggedInUser ? (
+              <>
+                <Typography variant="body1">Hi, {loggedInUser.name}</Typography>
+                {loggedInUser.role === "admin" && (
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate("/admin")}
+                    sx={{
+                      backgroundColor: "#4682b4",
+                      "&:hover": { backgroundColor: "#3a6d9a" },
+                    }}
+                  >
+                    Admin Panel
+                  </Button>
+                )}
+                <IconButton color="primary" onClick={handleProfileClick}>
+                  <AccountCircle />
+                </IconButton>
+                <Button variant="outlined" onClick={handleLogout}>
+                  Log Out
+                </Button>
+              </>
+            ) : (
+              <Button variant="outlined" onClick={handleLoginOpen}>
+                Login
               </Button>
-            </Box>
-          ) : (
-            <Button variant="outlined" onClick={handleLoginOpen}>
-              Login
-            </Button>
-          )}
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 
       <Dialog open={loginOpen} onClose={handleLoginClose} maxWidth="xs" fullWidth>
-        <DialogTitle>{tabIndex === 0 ? 'Login' : 'Sign Up'}</DialogTitle>
-        <DialogContent
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            mt: 1,
-          }}
-        >
+        <DialogTitle>{tabIndex === 0 ? "Login" : "Sign Up"}</DialogTitle>
+        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
           <Tabs value={tabIndex} onChange={handleTabChange} centered>
             <Tab label="Login" />
             <Tab label="Sign Up" />
@@ -159,11 +171,19 @@ const Navbar = () => {
 
           {tabIndex === 0 && (
             <>
-              <TextField label="Email" type="email" fullWidth />
+              <TextField
+                label="Email"
+                type="email"
+                fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <TextField
                 label="Password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 fullWidth
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -183,7 +203,7 @@ const Navbar = () => {
               <TextField label="Email" type="email" fullWidth />
               <TextField
                 label="Password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 fullWidth
                 InputProps={{
                   endAdornment: (
@@ -197,7 +217,7 @@ const Navbar = () => {
               />
               <TextField
                 label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 fullWidth
                 InputProps={{
                   endAdornment: (
@@ -216,12 +236,12 @@ const Navbar = () => {
         <DialogActions>
           <Button onClick={handleLoginClose}>Cancel</Button>
           <Button variant="contained" onClick={handleSubmit}>
-            {tabIndex === 0 ? 'Log In' : 'Sign Up'}
+            {tabIndex === 0 ? "Log In" : "Sign Up"}
           </Button>
         </DialogActions>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
