@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { Card, CardMedia, CardContent, Typography } from '@mui/material'
+import { Card, CardMedia, CardContent, Typography, Chip } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-const ProductCard = ({ product }) => {
+const statusColors = {
+  pending: 'warning',
+  active: 'success',
+  rejected: 'error',
+  purchased: 'info',
+}
+
+const ProductCard = ({ product, showStatus = false }) => {
   const [currentImage, setCurrentImage] = useState(0)
 
   useEffect(() => {
+    if (!product.images || product.images.length <= 1) return
     const interval = setInterval(() => {
       setCurrentImage((prev) =>
         prev === product.images.length - 1 ? 0 : prev + 1
       )
     }, 6000)
     return () => clearInterval(interval)
-  }, [product.images.length])
+  }, [product.images])
 
   return (
     <Link to={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
@@ -26,6 +34,7 @@ const ProductCard = ({ product }) => {
           flexDirection: 'column',
           cursor: 'pointer',
           overflow: 'hidden',
+          position: 'relative',
           transition: 'transform 0.2s ease, box-shadow 0.2s ease',
           '&:hover': {
             transform: 'scale(1.05)',
@@ -35,7 +44,11 @@ const ProductCard = ({ product }) => {
       >
         <CardMedia
           component="img"
-          image={product.images[currentImage]}
+          image={
+            Array.isArray(product.images)
+              ? product.images[currentImage]
+              : product.images
+          }
           alt={product.title}
           sx={{
             height: 180,
@@ -43,6 +56,24 @@ const ProductCard = ({ product }) => {
             transition: 'opacity 0.5s ease',
           }}
         />
+
+        {showStatus && product.status && (
+          <Chip
+            label={
+              product.status === 'active'
+                ? 'Active'
+                : product.status.charAt(0).toUpperCase() + product.status.slice(1)
+            }
+            color={statusColors[product.status] || 'default'}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              fontWeight: 'bold',
+            }}
+          />
+        )}
 
         <CardContent sx={{ textAlign: 'center', paddingY: 1 }}>
           <Typography variant="subtitle1" fontWeight="bold" noWrap>
