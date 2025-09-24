@@ -70,7 +70,13 @@ const ProductDetail = ({ products }) => {
       <Typography variant="body2" color="text.secondary" gutterBottom>{product.description}</Typography>
 
       <Box sx={{ marginTop: 3 }}>
-        <Button variant="contained" sx={{ marginRight: 2 }}>Contact Seller</Button>
+        <Button
+          variant="contained"
+          sx={{ marginRight: 2 }}
+          onClick={() => navigate(`/chat/${product.id}`)}
+        >
+          Contact Seller
+        </Button>
         <Button variant="outlined" onClick={() => navigate(-1)}>Go Back</Button>
       </Box>
     </Box>
