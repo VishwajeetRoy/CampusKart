@@ -21,7 +21,7 @@ import { Visibility, VisibilityOff, AccountCircle, Brightness4, Brightness7 } fr
 import { Link, useNavigate } from "react-router-dom";
 import categories from "../data/categories";
 
-const Navbar = ({ loggedInUser, setLoggedInUser, darkMode, setDarkMode }) => {
+const Navbar = ({ loggedInUser, setLoggedInUser, darkMode, setDarkMode, setToast }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -51,21 +51,101 @@ const Navbar = ({ loggedInUser, setLoggedInUser, darkMode, setDarkMode }) => {
   const handleLoginClose = () => setLoginOpen(false);
   const handleTabChange = (event, newValue) => setTabIndex(newValue);
 
-  const handleSubmit = () => {
-    if (email === "admin@campuskart.com" && password === "admin123") {
-      setLoggedInUser({ name: "Admin", role: "admin" });
-      setLoginOpen(false);
-      navigate("/admin");
-    } else {
-      setLoggedInUser({ name: "John Doe", role: "user" });
-      setLoginOpen(false);
-      navigate("/");
+  const handleSubmit = async () => {
+    try {
+      const { authAPI } = await import('../services/api');
+      
+      if (tabIndex === 0) {
+        // Login
+        const response = await authAPI.login({ email, password });
+        const userData = response.data;
+        
+        // Store token and user data
+        localStorage.setItem('token', userData.token);
+        setLoggedInUser({
+          _id: userData._id,
+          name: userData.name,
+          email: userData.email,
+          role: userData.role,
+          avatar: userData.avatar,
+        });
+        
+        setLoginOpen(false);
+        setEmail('');
+        setPassword('');
+        
+        if (userData.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+        
+        setToast?.({ 
+          open: true, 
+          message: 'Login successful!', 
+          severity: 'success' 
+        });
+      } else {
+        // Register
+        const fullName = document.querySelector('input[label="Full Name"]')?.value;
+        const confirmPassword = document.querySelector('input[label="Confirm Password"]')?.value;
+        
+        if (password !== confirmPassword) {
+          setToast?.({ 
+            open: true, 
+            message: 'Passwords do not match', 
+            severity: 'error' 
+          });
+          return;
+        }
+        
+        const response = await authAPI.register({ 
+          name: fullName, 
+          email, 
+          password 
+        });
+        const userData = response.data;
+        
+        // Store token and user data
+        localStorage.setItem('token', userData.token);
+        setLoggedInUser({
+          _id: userData._id,
+          name: userData.name,
+          email: userData.email,
+          role: userData.role,
+          avatar: userData.avatar,
+        });
+        
+        setLoginOpen(false);
+        setEmail('');
+        setPassword('');
+        navigate('/');
+        
+        setToast?.({ 
+          open: true, 
+          message: 'Registration successful!', 
+          severity: 'success' 
+        });
+      }
+    } catch (error) {
+      console.error('Auth error:', error);
+      setToast?.({ 
+        open: true, 
+        message: error.response?.data?.message || 'Authentication failed', 
+        severity: 'error' 
+      });
     }
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     setLoggedInUser(null);
     navigate("/");
+    setToast?.({ 
+      open: true, 
+      message: 'Logged out successfully', 
+      severity: 'success' 
+    });
   };
 
   const handleProfileClick = () => {

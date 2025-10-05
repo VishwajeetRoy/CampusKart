@@ -12,7 +12,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 const ProductDetail = ({ products }) => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const product = products.find((p) => p.id === parseInt(id))
+  const product = products.find((p) => p._id === id || p.id === parseInt(id))
 
   const [currentImage, setCurrentImage] = useState(0)
 
@@ -66,14 +66,14 @@ const ProductDetail = ({ products }) => {
       <Typography variant="h4" gutterBottom>{product.title}</Typography>
       <Typography variant="h5" color="primary" gutterBottom>₹{product.price}</Typography>
       <Typography variant="body1" gutterBottom><strong>Category:</strong> {product.category}</Typography>
-      <Typography variant="body1" gutterBottom><strong>Seller:</strong> John Doe</Typography>
+      <Typography variant="body1" gutterBottom><strong>Seller:</strong> {product.sellerId?.name || 'Unknown'}</Typography>
       <Typography variant="body2" color="text.secondary" gutterBottom>{product.description}</Typography>
 
       <Box sx={{ marginTop: 3 }}>
         <Button
           variant="contained"
           sx={{ marginRight: 2 }}
-          onClick={() => navigate(`/chat/${product.id}`)}
+          onClick={() => navigate(`/chat/${product._id || product.id}`)}
         >
           Contact Seller
         </Button>

@@ -10,21 +10,36 @@ import {
 import categories from '../data/categories'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 
-const AddListing = ({ onAddProduct }) => {
+const AddListing = ({ onAddProduct, loggedInUser }) => {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
-  const [images, setImages] = useState([])
+  const [imageFiles, setImageFiles] = useState([])
+  const [imagePreviews, setImagePreviews] = useState([])
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files)
-    const imageUrls = files.map((file) => URL.createObjectURL(file))
-    setImages((prev) => [...prev, ...imageUrls])
+    
+    // Limit to 5 images
+    if (imageFiles.length + files.length > 5) {
+      alert('Maximum 5 images allowed')
+      return
+    }
+    
+    setImageFiles((prev) => [...prev, ...files])
+    
+    const previews = files.map((file) => URL.createObjectURL(file))
+    setImagePreviews((prev) => [...prev, ...previews])
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    if (!loggedInUser) {
+      alert('Please login to add a listing')
+      return
+    }
 
     if (!title || !price || !category) {
       alert('Please fill in all required fields')
@@ -36,7 +51,7 @@ const AddListing = ({ onAddProduct }) => {
       price,
       description,
       category,
-      images: images.length ? images : ['/placeholder.png'],
+      images: imageFiles,
     }
 
     onAddProduct(newProduct)
@@ -45,7 +60,8 @@ const AddListing = ({ onAddProduct }) => {
     setPrice('')
     setDescription('')
     setCategory('')
-    setImages([])
+    setImageFiles([])
+    setImagePreviews([])
   }
 
   return (
@@ -122,7 +138,7 @@ const AddListing = ({ onAddProduct }) => {
       </Button>
 
       <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-        {images.map((img, idx) => (
+        {imagePreviews.map((img, idx) => (
           <Box
             key={idx}
             component="img"

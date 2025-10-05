@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import ProductCard from "../components/ProductCard";
+import { adminAPI } from "../services/api";
 
-const AdminDashboard = ({ products, onUpdateStatus }) => {
+const AdminDashboard = ({ products, onUpdateStatus, fetchProducts }) => {
   const [filter, setFilter] = useState("pending");
+  const [adminProducts, setAdminProducts] = useState([]);
+
+  useEffect(() => {
+    fetchAdminProducts();
+  }, [filter]);
+
+  const fetchAdminProducts = async () => {
+    try {
+      const response = await adminAPI.getAllProducts(filter);
+      setAdminProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching admin products:", error);
+    }
+  };
 
   const handleFilterChange = (event, newFilter) => {
     if (newFilter !== null) setFilter(newFilter);
   };
 
-  const filteredProducts =
-    filter === "all"
-      ? products
-      : products.filter((p) => p.status === filter);
+  const handleUpdateStatus = async (productId, newStatus) => {
+    try {
+      await adminAPI.updateProductStatus(productId, newStatus);
+      fetchAdminProducts();
+      if (fetchProducts) fetchProducts();
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const filteredProducts = adminProducts;
 
   return (
     <Box sx={{ padding: 4 }}>
@@ -58,14 +80,14 @@ const AdminDashboard = ({ products, onUpdateStatus }) => {
                   <Button
                     variant="contained"
                     color="success"
-                    onClick={() => onUpdateStatus(product.id, "active")}
+                    onClick={() => handleUpdateStatus(product._id, "active")}
                   >
                     Approve
                   </Button>
                   <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => onUpdateStatus(product.id, "rejected")}
+                    onClick={() => handleUpdateStatus(product._id, "rejected")}
                   >
                     Reject
                   </Button>

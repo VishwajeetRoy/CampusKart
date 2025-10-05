@@ -1,39 +1,42 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Typography, Avatar, Divider, Tabs, Tab } from '@mui/material'
 import ProductCard from '../components/ProductCard'
+import { usersAPI } from '../services/api'
 
-const Profile = ({ products, loggedInUser }) => {
+const Profile = ({ products, loggedInUser, fetchProducts }) => {
   const [activeTab, setActiveTab] = useState(0)
+  const [userListings, setUserListings] = useState([])
+  const [purchases, setPurchases] = useState([])
 
   const user = loggedInUser || {
-    id: 'user1',
+    _id: 'user1',
     name: 'John Doe',
     email: 'john@example.com',
     avatar: 'https://xsgames.co/randomusers/assets/avatars/male/63.jpg',
   }
 
-  const userProducts = products.filter((p) => p.sellerId === user.id)
+  useEffect(() => {
+    if (loggedInUser) {
+      fetchUserData();
+    }
+  }, [loggedInUser]);
 
-  const purchasedItems = [
-    {
-      id: 101,
-      title: 'Headphones',
-      price: '1,000',
-      category: 'Electronics',
-      images:
-        'https://sonyworld.qa/cdn/shop/files/1_WH-1000XM5_standard_smokypink-Large_707d7e02-993b-4e38-96a3-d107efa9cd42.jpg?v=1728287183&width=1080',
-      status: 'purchased',
-    },
-    {
-      id: 102,
-      title: 'Backpack',
-      price: '500',
-      category: 'Clothes',
-      images:
-        'https://www.furjaden.com/cdn/shop/files/Website1_b82bff56-474e-4bc6-9c6f-f20c037518a7.jpg?v=1732465038',
-      status: 'purchased',
-    },
-  ]
+  const fetchUserData = async () => {
+    try {
+      const [listingsRes, purchasesRes] = await Promise.all([
+        usersAPI.getListings(),
+        usersAPI.getPurchases()
+      ]);
+      setUserListings(listingsRes.data);
+      setPurchases(purchasesRes.data);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const userProducts = loggedInUser ? userListings : products.filter((p) => p.sellerId === user._id)
+
+  const purchasedItems = purchases
 
   const pendingListings = userProducts.filter((p) => p.status === 'pending')
   const approvedListings = userProducts.filter((p) => p.status === 'active')
@@ -84,7 +87,7 @@ const Profile = ({ products, loggedInUser }) => {
               }}
             >
               {userProducts.map((p) => (
-                <ProductCard key={p.id} product={p} showStatus />
+                <ProductCard key={p._id || p.id} product={p} showStatus />
               ))}
             </Box>
           )}
@@ -106,7 +109,7 @@ const Profile = ({ products, loggedInUser }) => {
               }}
             >
               {pendingListings.map((p) => (
-                <ProductCard key={p.id} product={p} showStatus />
+                <ProductCard key={p._id || p.id} product={p} showStatus />
               ))}
             </Box>
           )}
@@ -128,7 +131,7 @@ const Profile = ({ products, loggedInUser }) => {
               }}
             >
               {approvedListings.map((p) => (
-                <ProductCard key={p.id} product={p} showStatus />
+                <ProductCard key={p._id || p.id} product={p} showStatus />
               ))}
             </Box>
           )}
@@ -148,7 +151,7 @@ const Profile = ({ products, loggedInUser }) => {
               }}
             >
               {rejectedListings.map((p) => (
-                <ProductCard key={p.id} product={p} showStatus />
+                <ProductCard key={p._id || p.id} product={p} showStatus />
               ))}
             </Box>
           )}
@@ -170,7 +173,7 @@ const Profile = ({ products, loggedInUser }) => {
               }}
             >
               {purchasedItems.map((p) => (
-                <ProductCard key={p.id} product={p} showStatus />
+                <ProductCard key={p._id || p.id} product={p.productId || p} showStatus />
               ))}
             </Box>
           )}

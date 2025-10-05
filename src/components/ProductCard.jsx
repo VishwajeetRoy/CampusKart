@@ -23,7 +23,7 @@ const ProductCard = ({ product, showStatus = false }) => {
   }, [product.images])
 
   return (
-    <Link to={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
+    <Link to={`/product/${product._id || product.id}`} style={{ textDecoration: 'none' }}>
       <Card
         sx={{
           width: '100%',
