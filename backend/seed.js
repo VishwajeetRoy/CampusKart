@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const User = require('./models/User');
 const Product = require('./models/Product');
+const cloudinary = require('./config/cloudinary'); // Import Cloudinary config
 
 dotenv.config();
 
@@ -18,6 +19,19 @@ const connectDB = async () => {
   }
 };
 
+// Helper function to upload images from a URL to Cloudinary
+const uploadToCloudinary = async (imageUrl, folder) => {
+  try {
+    const result = await cloudinary.uploader.upload(imageUrl, {
+      folder: folder,
+    });
+    return result.secure_url;
+  } catch (error) {
+    console.error(`Error uploading image to Cloudinary:`, error);
+    return null;
+  }
+};
+
 const seedData = async () => {
   try {
     await connectDB();
@@ -26,36 +40,47 @@ const seedData = async () => {
     await User.deleteMany();
     await Product.deleteMany();
 
-    // Create admin user
+    // Upload avatars and create users
+    const adminAvatarUrl = await uploadToCloudinary(
+      'https://xsgames.co/randomusers/assets/avatars/male/1.jpg',
+      'campuskart_avatars'
+    );
     const admin = await User.create({
       name: 'Admin',
       email: 'admin@campuskart.com',
       password: 'admin123',
       role: 'admin',
-      avatar: 'https://xsgames.co/randomusers/assets/avatars/male/1.jpg',
+      avatar: adminAvatarUrl,
     });
 
-    // Create regular users
+    const user1AvatarUrl = await uploadToCloudinary(
+      'https://xsgames.co/randomusers/assets/avatars/male/63.jpg',
+      'campuskart_avatars'
+    );
     const user1 = await User.create({
       name: 'John Doe',
       email: 'john@example.com',
       password: 'password123',
       role: 'user',
-      avatar: 'https://xsgames.co/randomusers/assets/avatars/male/63.jpg',
+      avatar: user1AvatarUrl,
     });
 
+    const user2AvatarUrl = await uploadToCloudinary(
+      'https://xsgames.co/randomusers/assets/avatars/female/44.jpg',
+      'campuskart_avatars'
+    );
     const user2 = await User.create({
       name: 'Jane Smith',
       email: 'jane@example.com',
       password: 'password123',
       role: 'user',
-      avatar: 'https://xsgames.co/randomusers/assets/avatars/female/44.jpg',
+      avatar: user2AvatarUrl,
     });
 
     console.log('Users created successfully');
 
-    // Create sample products
-    const products = [
+    // Sample product data with external image URLs
+    const productsToCreate = [
       {
         title: 'Used Laptop - Dell Inspiron',
         images: [
@@ -104,6 +129,18 @@ const seedData = async () => {
         status: 'active',
       },
     ];
+
+    // Map over products, upload their images, and create them
+    const products = await Promise.all(
+      productsToCreate.map(async (product) => {
+        const imageUrls = await Promise.all(
+          product.images.map((url) =>
+            uploadToCloudinary(url, 'campuskart_products')
+          )
+        );
+        return { ...product, images: imageUrls.filter((url) => url) };
+      })
+    );
 
     await Product.insertMany(products);
 

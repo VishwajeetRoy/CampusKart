@@ -41,22 +41,30 @@ exports.getProductById = async (req, res) => {
 // @access  Private
 exports.createProduct = async (req, res) => {
   try {
+    console.log('--- CREATE PRODUCT REQUEST ---');
+    console.log('Request Body:', req.body);
+    console.log('Request Files:', req.files);
+    console.log('-----------------------------')
     const { title, price, description, category, images } = req.body;
 
     // Handle uploaded files
-    let imageUrls = images || [];
+    let imageUrls = [];
     if (req.files && req.files.length > 0) {
-      imageUrls = req.files.map(
-        (file) => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
-      );
+      // req.files will contain the response from Cloudinary
+      // file.path will be the secure URL
+      imageUrls = req.files.map((file) => file.path);
     }
 
+    if (!category || !['Electronics', 'Books', 'Stationary', 'Clothes'].includes(category)) {
+      return res.status(400).json({ message: 'Invalid category specified' });
+    }
+    
     const product = await Product.create({
       title,
       price,
       description,
       category,
-      images: imageUrls,
+      images: imageUrls, // Save the Cloudinary URLs
       sellerId: req.user._id,
       status: 'pending',
     });
@@ -92,11 +100,18 @@ exports.updateProduct = async (req, res) => {
 
     const { title, price, description, category, images } = req.body;
 
+    // Default to existing images if no new ones are provided
+    let imageUrls = images || product.images;
+    // If new files are uploaded, get their Cloudinary URLs
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map((file) => file.path);
+    }
+
     product.title = title || product.title;
     product.price = price || product.price;
     product.description = description || product.description;
     product.category = category || product.category;
-    product.images = images || product.images;
+    product.images = imageUrls; // Update with new URLs
 
     const updatedProduct = await product.save();
     const populatedProduct = await Product.findById(updatedProduct._id).populate(
