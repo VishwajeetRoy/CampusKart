@@ -90,7 +90,6 @@ const AddListing = ({ onAddProduct, loggedInUser }) => {
     }
   }
 
-
   return (
     <Box
       sx={{

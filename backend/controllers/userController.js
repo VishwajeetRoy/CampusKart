@@ -39,7 +39,13 @@ exports.updateProfile = async (req, res) => {
 
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    user.avatar = req.body.avatar || user.avatar;
+    
+    // Handle avatar upload
+    if (req.file) {
+      user.avatar = req.file.path; // Cloudinary URL from upload middleware
+    } else {
+      user.avatar = req.body.avatar || user.avatar;
+    }
 
     if (req.body.password) {
       user.password = req.body.password;

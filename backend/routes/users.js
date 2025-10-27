@@ -8,9 +8,10 @@ const {
   purchaseProduct,
 } = require('../controllers/userController');
 const { protect } = require('../middleware/auth');
+const upload = require('../middleware/upload');
 
 router.get('/profile', protect, getProfile);
-router.put('/profile', protect, updateProfile);
+router.put('/profile', protect, upload.single('avatar'), updateProfile);
 router.get('/listings', protect, getUserListings);
 router.get('/purchases', protect, getUserPurchases);
 router.post('/purchase/:productId', protect, purchaseProduct);

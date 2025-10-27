@@ -160,7 +160,7 @@ function App() {
         />
         <Route
           path="/profile"
-          element={<Profile products={products} loggedInUser={loggedInUser} fetchProducts={fetchProducts} />}
+          element={<Profile products={products} loggedInUser={loggedInUser} fetchProducts={fetchProducts} setLoggedInUser={setLoggedInUser} />}
         />
         <Route
           path="/product/:id"

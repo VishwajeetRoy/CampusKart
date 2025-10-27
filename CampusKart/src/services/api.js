@@ -54,7 +54,14 @@ export const adminAPI = {
 // Users API
 export const usersAPI = {
   getProfile: () => api.get('/users/profile'),
-  updateProfile: (userData) => api.put('/users/profile', userData),
+  updateProfile: (userData) => {
+    const isFormData = userData instanceof FormData;
+    return api.put('/users/profile', userData, {
+      headers: isFormData ? {
+        'Content-Type': 'multipart/form-data',
+      } : {},
+    });
+  },
   getListings: () => api.get('/users/listings'),
   getPurchases: () => api.get('/users/purchases'),
   purchaseProduct: (productId) => api.post(`/users/purchase/${productId}`),

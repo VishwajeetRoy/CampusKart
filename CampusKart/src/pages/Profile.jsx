@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Typography, Avatar, Divider, Tabs, Tab } from '@mui/material'
+import { 
+  Box, 
+  Typography, 
+  Avatar, 
+  Divider, 
+  Tabs, 
+  Tab,
+  IconButton,
+  Badge,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button
+} from '@mui/material'
+import { Edit as EditIcon } from '@mui/icons-material'
 import ProductCard from '../components/ProductCard'
 import { usersAPI } from '../services/api'
 
-const Profile = ({ products, loggedInUser, fetchProducts }) => {
+const Profile = ({ products, loggedInUser, fetchProducts, setLoggedInUser }) => {
   const [activeTab, setActiveTab] = useState(0)
   const [userListings, setUserListings] = useState([])
   const [purchases, setPurchases] = useState([])
+  const [avatarHover, setAvatarHover] = useState(false)
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const navigate = useNavigate()
 
   // Fallback user for display purposes if not logged in
@@ -40,7 +57,45 @@ const Profile = ({ products, loggedInUser, fetchProducts }) => {
 
   // Function to navigate to the add listing page with product data to edit
   const handleResubmit = (product) => {
-    navigate('/add-listing', { state: { product } });
+    navigate('/add', { state: { product } });
+  };
+
+  // Handle avatar file upload
+  const handleAvatarUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Please select a valid image file (JPEG, PNG, GIF, WebP)');
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const response = await usersAPI.updateProfile(formData);
+      
+      // Update the logged in user state with new avatar
+      setLoggedInUser(prev => ({
+        ...prev,
+        avatar: response.data.avatar
+      }));
+
+      setUploadDialogOpen(false);
+      alert('Profile picture updated successfully!');
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+      alert('Failed to update profile picture. Please try again.');
+    }
   };
 
   // Determine which product list to use
@@ -84,7 +139,37 @@ const Profile = ({ products, loggedInUser, fetchProducts }) => {
     <Box sx={{ padding: 4 }}>
       {/* User Profile Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
-        <Avatar src={user.avatar} sx={{ width: 80, height: 80 }} />
+        <Box
+          sx={{ position: 'relative' }}
+          onMouseEnter={() => setAvatarHover(true)}
+          onMouseLeave={() => setAvatarHover(false)}
+        >
+          <Avatar 
+            src={user.avatar} 
+            sx={{ width: 80, height: 80, cursor: 'pointer' }}
+            onClick={() => setUploadDialogOpen(true)}
+          />
+          {avatarHover && (
+            <IconButton
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: 80,
+                height: 80,
+                borderRadius: '50%',
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                },
+              }}
+              onClick={() => setUploadDialogOpen(true)}
+            >
+              <EditIcon />
+            </IconButton>
+          )}
+        </Box>
         <Box>
           <Typography variant="h5">{user.name}</Typography>
           <Typography variant="body1" color="text.secondary">
@@ -113,12 +198,37 @@ const Profile = ({ products, loggedInUser, fetchProducts }) => {
       </Tabs>
 
       {/* Tab Panels */}
-      {activeTab === 0 && renderProductList(userProducts, "You haven’t posted anything yet.")}
-      {activeTab === 1 && renderProductList(pendingListings, "You don’t have any pending listings.")}
+      {activeTab === 0 && renderProductList(userProducts, "You haven't posted anything yet.")}
+      {activeTab === 1 && renderProductList(pendingListings, "You don't have any pending listings.")}
       {activeTab === 2 && renderProductList(approvedListings, "No approved listings yet.")}
       {/* Set the 'provideResubmit' flag to true only for the rejected list */}
       {activeTab === 3 && renderProductList(rejectedListings, "No rejected listings.", true)}
-      {activeTab === 4 && renderProductList(purchasedItems, "You haven’t bought anything yet.")}
+      {activeTab === 4 && renderProductList(purchasedItems, "You haven't bought anything yet.")}
+
+      {/* Avatar Upload Dialog */}
+      <Dialog open={uploadDialogOpen} onClose={() => setUploadDialogOpen(false)}>
+        <DialogTitle>Update Profile Picture</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Select a new profile picture. Maximum file size: 5MB. Supported formats: JPEG, PNG, GIF, WebP.
+            </Typography>
+          <input
+            accept="image/*"
+            style={{ display: 'none' }}
+            id="avatar-upload"
+            type="file"
+            onChange={handleAvatarUpload}
+          />
+          <label htmlFor="avatar-upload">
+            <Button variant="contained" component="span">
+              Choose File
+            </Button>
+          </label>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setUploadDialogOpen(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }

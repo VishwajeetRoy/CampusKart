@@ -112,6 +112,16 @@ const Navbar = ({
           return;
         }
 
+        // Check if email is a valid Thakur College email
+        if (!registerEmail.toLowerCase().endsWith("@tcetmumbai.in")) {
+          setToast?.({
+            open: true,
+            message: "Please use a valid Thakur College email (@tcetmumbai.in)",
+            severity: "error",
+          });
+          return;
+        }
+
         const response = await authAPI.register({
           name: registerName,
           email: registerEmail,

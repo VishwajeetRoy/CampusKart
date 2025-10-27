@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardMedia, CardContent, Typography, Chip, Button } from '@mui/material'
-// Removed 'Link' as it's replaced by the div wrapper and navigate hook
 import { useNavigate } from 'react-router-dom'
 
 const statusColors = {
@@ -114,6 +113,10 @@ const ProductCard = ({ product, showStatus = false, onResubmit }) => {
               variant="contained"
               size="small"
               sx={{ mt: 1 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onResubmit(product);
+              }}
             >
               Resubmit
             </Button>
