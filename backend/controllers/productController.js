@@ -112,6 +112,8 @@ exports.updateProduct = async (req, res) => {
     product.description = description || product.description;
     product.category = category || product.category;
     product.images = imageUrls; // Update with new URLs
+    product.status = 'pending'; // Reset status to pending for re-approval
+    product.rejectionReason = undefined; // Clear previous rejection reason
 
     const updatedProduct = await product.save();
     const populatedProduct = await Product.findById(updatedProduct._id).populate(

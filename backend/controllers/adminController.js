@@ -27,7 +27,7 @@ exports.getAllProducts = async (req, res) => {
 // @access  Private/Admin
 exports.updateProductStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status,rejectionReason } = req.body;
 
     if (!['pending', 'active', 'rejected'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
@@ -40,6 +40,16 @@ exports.updateProductStatus = async (req, res) => {
     }
 
     product.status = status;
+    if (status === 'rejected') {
+      if (!rejectionReason) {
+        return res
+          .status(400)
+          .json({ message: 'Rejection reason is required' });
+      }
+      product.rejectionReason = rejectionReason;
+    } else {
+      product.rejectionReason = undefined; // Clear reason if status is not 'rejected'
+    }
     const updatedProduct = await product.save();
 
     const populatedProduct = await Product.findById(updatedProduct._id).populate(

@@ -34,6 +34,12 @@ const productSchema = new mongoose.Schema(
       enum: ['pending', 'active', 'rejected', 'sold'],
       default: 'pending',
     },
+    rejectionReason: {
+      type: String,
+      required: function () {
+        return this.status === 'rejected';
+      },
+    },
   },
   {
     timestamps: true,
