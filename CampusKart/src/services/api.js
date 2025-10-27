@@ -65,6 +65,7 @@ export const usersAPI = {
   getListings: () => api.get('/users/listings'),
   getPurchases: () => api.get('/users/purchases'),
   purchaseProduct: (productId) => api.post(`/users/purchase/${productId}`),
+  markAsSold: (productId) => api.put(`/users/listings/${productId}/sold`),
 };
 
 export default api;

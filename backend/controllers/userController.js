@@ -155,3 +155,44 @@ exports.purchaseProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// @desc    Mark product as sold
+// @route   PUT /api/users/listings/:productId/sold
+// @access  Private
+exports.markProductAsSold = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Check if user is the owner
+    if (product.sellerId.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: 'Not authorized to update this product' });
+    }
+
+    // Check if product is active (can only mark active products as sold)
+    if (product.status !== 'active') {
+      return res.status(400).json({ message: 'Only active products can be marked as sold' });
+    }
+
+    product.status = 'sold';
+    await product.save();
+
+    const populatedProduct = await Product.findById(product._id).populate(
+      'sellerId',
+      'name email avatar'
+    );
+
+    res.json(populatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+

@@ -103,13 +103,13 @@ const ProductDetail = () => {
 
       {/* Action Buttons */}
       <Box sx={{ marginTop: 3 }}>
-        <Button
+       { product.status === 'active' && <Button
           variant="contained"
           sx={{ marginRight: 2 }}
           onClick={() => navigate(`/chat/${product._id || product.id}`)}
         >
           Contact Seller
-        </Button>
+        </Button>}
         <Button variant="outlined" onClick={() => navigate(-1)}>Go Back</Button>
       </Box>
     </Box>
