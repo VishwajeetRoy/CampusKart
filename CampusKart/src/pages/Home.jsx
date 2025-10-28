@@ -15,7 +15,7 @@ const Home = ({ products }) => {
         }}
       >
         {products.map((p) => (
-          <ProductCard key={p._id || p.id} product={p} />
+           p.status === 'active' && <ProductCard key={p._id || p.id} product={p} />
         ))}
       </Box>
     </Box>

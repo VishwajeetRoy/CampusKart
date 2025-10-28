@@ -6,8 +6,8 @@ const ChatPage = ({ products }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const product = products.find((p) => p.id === parseInt(id)) || {};
-  const sellerName = product.sellerId || "Seller";
+  const product = products.find((p) => p._id === id) || {};
+  const sellerName = product.sellerId?.name || "Seller";
   const productName = product.title || "Item";
 
   const [messages, setMessages] = useState([]);

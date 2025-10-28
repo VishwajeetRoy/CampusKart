@@ -136,7 +136,7 @@ const Profile = ({ products, loggedInUser, fetchProducts, setLoggedInUser }) => 
   const pendingListings = userProducts.filter((p) => p.status === 'pending');
   const approvedListings = userProducts.filter((p) => p.status === 'active');
   const rejectedListings = userProducts.filter((p) => p.status === 'rejected');
-
+  const currentListings = userProducts.filter((p) => p.status !== 'sold');
   // Helper function to render a list of products
   const renderProductList = (
     products,
@@ -156,7 +156,7 @@ const Profile = ({ products, loggedInUser, fetchProducts, setLoggedInUser }) => 
         }}
       >
         {products.map((p) => (
-          <ProductCard
+        (p.status !== 'sold' || p.isSoldItem) && <ProductCard
             key={p._id || p.id}
             // Handle purchased items which might have product data nested under 'productId'
             product={p.productId || p}
@@ -226,17 +226,16 @@ const Profile = ({ products, loggedInUser, fetchProducts, setLoggedInUser }) => 
         scrollButtons="auto"
         sx={{ mb: 3 }}
       >
-        <Tab label={`My Current Listings (${userProducts.length})`} />
+        <Tab label={`My Current Listings (${currentListings.length})`} />
         <Tab label={`Pending (${pendingListings.length})`} />
         <Tab label={`Approved (${approvedListings.length})`} />
         <Tab label={`Rejected (${rejectedListings.length})`} />
-        {/* <Tab label={`Sold Items (${soldItems.length})`} /> */}
-        <Tab label={` Items (${allItems.length})`} />
+        <Tab label={` Items Sold (${allItems.length})`} />
       </Tabs>
 
       {/* Tab Panels */}
       {activeTab === 0 &&
-        renderProductList(userProducts, "You haven't posted anything yet.")}
+        renderProductList(currentListings, "You haven't posted anything yet.")}
       {activeTab === 1 &&
         renderProductList(pendingListings, "You don't have any pending listings.")}
       {/* Approved listings allow 'Mark as Sold' action */}
