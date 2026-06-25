@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -15,26 +15,26 @@ import {
 import ProductCard from "../components/ProductCard";
 import { adminAPI } from "../services/api";
 
-const AdminDashboard = ({ products, onUpdateStatus, fetchProducts }) => {
+const AdminDashboard = ({ fetchProducts }) => {
   const [filter, setFilter] = useState("pending");
   const [adminProducts, setAdminProducts] = useState([]);
   const [rejectionDialogOpen, setRejectionDialogOpen] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [selectedProductId, setSelectedProductId] = useState(null);
 
-  useEffect(() => {
-    fetchAdminProducts();
-  }, [filter]); // Refetches when filter changes
-
   // Fetches products from the API based on the current filter
-  const fetchAdminProducts = async () => {
+  const fetchAdminProducts = useCallback(async () => {
     try {
       const response = await adminAPI.getAllProducts(filter);
       setAdminProducts(response.data);
     } catch (error) {
       console.error("Error fetching admin products:", error);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchAdminProducts();
+  }, [fetchAdminProducts]); // Refetches when fetchAdminProducts (and therefore filter) changes
 
   // Handles changing the filter (Pending, Approved, etc.)
   const handleFilterChange = (event, newFilter) => {

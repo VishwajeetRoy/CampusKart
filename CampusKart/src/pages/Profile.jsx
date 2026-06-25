@@ -18,7 +18,7 @@ import { Edit as EditIcon } from '@mui/icons-material';
 import ProductCard from '../components/ProductCard';
 import { usersAPI } from '../services/api';
 
-const Profile = ({ products, loggedInUser, fetchProducts, setLoggedInUser }) => {
+const Profile = ({ products, loggedInUser, setLoggedInUser }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [userListings, setUserListings] = useState([]);
   const [purchases, setPurchases] = useState([]);

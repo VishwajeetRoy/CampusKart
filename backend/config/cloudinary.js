@@ -1,12 +1,13 @@
 const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
+const path = require('path');
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 console.log('--- Loading Cloudinary Config ---');
-console.log('Cloud Name:', process.env.CLOUD_NAME);
-console.log('API Key Loaded:', !!process.env.API_KEY);
-console.log('API Secret Loaded:', !!process.env.API_SECRET);
+console.log('Cloud Name:', process.env.CLOUDINARY_CLOUD_NAME);
+console.log('API Key Loaded:', !!process.env.CLOUDINARY_API_KEY);
+console.log('API Secret Loaded:', !!process.env.CLOUDINARY_API_SECRET);
 console.log('---------------------------------');
 
 

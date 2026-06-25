@@ -15,6 +15,20 @@ const ProductCard = ({ product, showStatus = false, onResubmit, onMarkAsSold, is
   const [currentImage, setCurrentImage] = useState(0);
   const navigate = useNavigate();
 
+  const images = product?.images;
+
+  // Image carousel effect
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) =>
+        prev === images.length - 1 ? 0 : prev + 1
+      );
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [images]);
+
   // Safety check and determination of sold status
   if (!product) {
     return null; // Don't render if product is missing
@@ -22,19 +36,6 @@ const ProductCard = ({ product, showStatus = false, onResubmit, onMarkAsSold, is
 
   // Use the passed isSoldItem prop instead of trying to read from product
   const displayStatus = isSoldItem ? 'sold' : product.status;
-
-
-  // Image carousel effect
-  useEffect(() => {
-    if (!product.images || product.images.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentImage((prev) =>
-        prev === product.images.length - 1 ? 0 : prev + 1
-      );
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [product.images]);
 
   // Handles clicks on the card
   const handleCardClick = (e) => {

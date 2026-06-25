@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Box, Typography, CircularProgress } from '@mui/material'
 import categories from '../data/categories'
@@ -11,36 +11,7 @@ const SearchResults = ({ products }) => {
   const [loading, setLoading] = useState(false)
   const rawSearch = query.toLowerCase()
 
-  useEffect(() => {
-    performSearch()
-  }, [query])
-
-  const performSearch = async () => {
-    try {
-      setLoading(true)
-      
-      // Check if query is a category
-      const isCategory = Object.keys(categories).some(
-        cat => cat.toLowerCase() === rawSearch
-      )
-      
-      if (isCategory) {
-        const response = await productsAPI.getByCategory(query)
-        setSearchResults(response.data)
-      } else {
-        const response = await productsAPI.search(query)
-        setSearchResults(response.data)
-      }
-    } catch (error) {
-      console.error('Search error:', error)
-      // Fallback to local filtering
-      performLocalSearch()
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const performLocalSearch = () => {
+  const performLocalSearch = useCallback(() => {
     const searchTerm =
       rawSearch.endsWith('s') && rawSearch.length > 3
         ? rawSearch.slice(0, -1)
@@ -72,7 +43,36 @@ const SearchResults = ({ products }) => {
     })
     
     setSearchResults(filteredProducts)
-  }
+  }, [rawSearch, products])
+
+  const performSearch = useCallback(async () => {
+    try {
+      setLoading(true)
+      
+      // Check if query is a category
+      const isCategory = Object.keys(categories).some(
+        cat => cat.toLowerCase() === rawSearch
+      )
+      
+      if (isCategory) {
+        const response = await productsAPI.getByCategory(query)
+        setSearchResults(response.data)
+      } else {
+        const response = await productsAPI.search(query)
+        setSearchResults(response.data)
+      }
+    } catch (error) {
+      console.error('Search error:', error)
+      // Fallback to local filtering
+      performLocalSearch()
+    } finally {
+      setLoading(false)
+    }
+  }, [query, rawSearch, performLocalSearch])
+
+  useEffect(() => {
+    performSearch()
+  }, [performSearch])
 
   const filteredProducts = searchResults
 
