@@ -1,4 +1,4 @@
-# CampusKart - Campus Marketplace Application
+# CampusKart - Campus Marketplace for Students
 
 A full-stack campus marketplace application where students can buy and sell items. Built with React (frontend) and Express.js + MongoDB (backend).
 
