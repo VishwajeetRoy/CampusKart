@@ -216,8 +216,3 @@ The frontend will run on `http://localhost:5173`
 ## License
 
 This project is open source and available under the MIT License.
-
-## Support
-
-For support, email support@campuskart.com or open an issue in the repository.
->>>>>>> 7277924 (Initial commit: Added the backend and integrated with frontend)
